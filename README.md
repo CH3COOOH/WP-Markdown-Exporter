@@ -1,15 +1,13 @@
-# WP Markdown Exporter
+# WP Markdown Exporter — v0.0.1
 
-A WordPress plugin that exports posts and pages as Markdown files in a ZIP archive. Perfect for backing up your content or migrating Markdown-formatted posts.
+Export selected posts and pages as Markdown files bundled in a ZIP archive. This release changes the export behavior to always use the user-selected source field (no automatic fallback), and exported files are always saved with a `.md` extension.
 
-## Features
+## Highlights (v0.0.1)
 
-- **Bulk Export** – Select multiple posts/pages and export them in one click
-- **Markdown Detection** – Automatically detects raw Markdown content from common meta keys (`editor_md`, `editormd`, `markdown`, `raw_markdown`, and more)
-- **HTML Fallback** – Posts without stored Markdown are exported as `.html` files using `post_content`
-- **Flexible File Naming** – Optional inclusion of post IDs in filenames to prevent name collisions
-- **Visual Status** – Color-coded table rows show which posts have original Markdown
-- **No Dependencies** – Works with ZipArchive or falls back to PclZip automatically
+- **Field Selection** — Choose which field to export: `post_content_filtered` (default), `post_content`, or `meta` (searches common markdown meta keys).
+- **No Fallback** — If the chosen field is empty for a post, an empty `.md` file will be created for that post.
+- **Unified .md Files** — All exported files use the `.md` extension.
+- **Filtered List** — The admin list shows only posts with non-empty `post_content`.
 
 ## Requirements
 
@@ -18,36 +16,19 @@ A WordPress plugin that exports posts and pages as Markdown files in a ZIP archi
 
 ## Installation
 
-### Method 1: Upload via WordPress Admin
-
-1. Download the plugin ZIP file to your computer
-2. In WordPress admin, go to **Plugins → Add New**
-3. Click the **Upload Plugin** button at the top of the page
-4. Click **Choose File**, select the `markdown-exporter.zip` file
-5. Click **Install Now**
-6. After installation, click **Activate Plugin**
-
-### Method 2: Manual FTP Installation
-
-1. Extract the `markdown-exporter` folder from the ZIP archive
-2. Upload the `markdown-exporter` folder to `/wp-content/plugins/` on your WordPress server
-3. Go to **Plugins** in your WordPress admin panel
-4. Find **Markdown Exporter** in the plugins list and click **Activate**
+Install and activate the plugin as a normal WordPress plugin (Upload via **Plugins → Add New** or copy the folder to `/wp-content/plugins/`).
 
 ## Usage
 
-1. Navigate to **Tools → Markdown Export** in your WordPress admin panel
-2. Select the posts or pages you want to export
-3. Choose whether to include post IDs in filenames (recommended for avoiding duplicate names)
-4. Click **Export as ZIP**
+1. Go to **Tools → Markdown Export** in the WordPress admin.
+2. Select posts/pages to export (the list shows only posts with non-empty `post_content`).
+3. Choose the export field from the dropdown (`post_content_filtered` is selected by default).
+4. Optionally include post IDs in filenames.
+5. Click **Export as ZIP**.
 
-The plugin will generate a ZIP file containing:
-- `.md` files for posts with stored Markdown
-- `.html` files for posts without stored Markdown
+The ZIP will contain `.md` files named from the post title (optionally suffixed with the post ID). For `meta` field exports the plugin will check common meta keys for raw Markdown.
 
-## Supported Markdown Meta Keys
-
-The plugin checks for raw Markdown content in the following post meta keys (in order):
+## Supported Markdown Meta Keys (when exporting `meta`)
 
 - `editor_md`
 - `editormd`
@@ -60,3 +41,10 @@ The plugin checks for raw Markdown content in the following post meta keys (in o
 - `md_content`
 - `editor_md_content`
 - `editor_md_text`
+
+## Notes
+
+- The plugin prefers `post_content_filtered` by default because many editors store cleaned/filtered content there. Choose `meta` to export raw stored Markdown when available.
+- There is intentionally no HTML fallback; export behavior is predictable and based solely on the selected field.
+
+If you want, I can also prepare a release ZIP and update a CHANGELOG file.
